@@ -16,7 +16,7 @@ const count = async () => {
   }
 }
 
-const find = async ({ page, limit, keyword, gender, countryId }) => {
+const find = async ({ page, limit, keyword, gender, countryId, role }) => {
   try {
     let _page = page ? (parseInt(page) >= 1 ? parseInt(page) : 1) : 1
     let _limit = limit ? (parseInt(limit) >= 1 ? parseInt(limit) : 20) : 20
@@ -49,6 +49,9 @@ const find = async ({ page, limit, keyword, gender, countryId }) => {
     if (countryId) {
       where = { ...where, countryId }
     }
+    if (role) {
+      where = { ...where, role: role.toUpperCase() }
+    }
 
     const count = await Model.count({ where })
     const items = await Model.findAll({
@@ -78,7 +81,7 @@ const findById = async (id) => {
       throw new Error('Not found')
     }
 
-    return entry
+    return entry.toJSON()
   } catch (error) {
     throw error
   }
@@ -93,7 +96,7 @@ const create = async (data) => {
 
     const created = await Model.create(data)
 
-    return findById(created.id)
+    return created.toJSON()
   } catch (error) {
     throw error
   }
@@ -103,7 +106,7 @@ const update = async (id, data) => {
   try {
     const updated = await Model.update(data, { where: { id }, returning: true, plain: true })
 
-    return findById(updated[1].id)
+    return updated[1].toJSON()
   } catch (error) {
     throw error
   }

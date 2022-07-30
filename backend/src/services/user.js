@@ -40,8 +40,18 @@ export default {
 
   update: async (req) => {
     try {
+      const { authorization } = req.headers
       const { id } = req.params
       let data = { ...req.body }
+
+      let auth = await Repository.getByToken(authorization)
+        .then((res) => res.toJSON())
+        .catch((err) => {})
+      console.log('auth?.id :>> ', auth?.id)
+
+      if (!auth || auth.id != id) {
+        throw new Error('Permission denied')
+      }
 
       return await Repository.update(id, data)
     } catch (error) {

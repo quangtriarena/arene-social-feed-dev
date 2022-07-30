@@ -2,13 +2,11 @@ import ResponseHandler from '../helpers/responseHandler.js'
 import Joi from 'joi'
 
 const schema = {
-  firstName: Joi.string().min(3).max(30).required(),
-  lastName: Joi.string().min(3).max(30).required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
-  username: Joi.string().min(3).max(50).required(),
-  password: Joi.string().pattern(new RegExp('^[a-zA-Z0-9]{3,30}$')).required(),
+  firstName: Joi.string().trim().required().min(1).max(30),
+  lastName: Joi.string().trim().required().min(1).max(30),
+  email: Joi.string().trim().required().min(1).max(50).email(),
+  username: Joi.string().trim().required().min(1).max(50),
+  password: Joi.string().required().min(8).max(50),
   gender: Joi.any(),
   birthday: Joi.any(),
   avatar: Joi.any(),

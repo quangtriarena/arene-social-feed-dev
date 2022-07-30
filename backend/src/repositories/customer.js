@@ -12,7 +12,7 @@ const count = async () => {
   }
 }
 
-const find = async ({ page, limit, keyword, gender, countryId, role }) => {
+const find = async ({ page, limit, keyword, gender, countryId, plan }) => {
   try {
     let _page = page ? (parseInt(page) >= 1 ? parseInt(page) : 1) : 1
     let _limit = limit ? (parseInt(limit) >= 1 ? parseInt(limit) : 20) : 20
@@ -50,8 +50,8 @@ const find = async ({ page, limit, keyword, gender, countryId, role }) => {
     if (countryId) {
       where = { ...where, countryId }
     }
-    if (role) {
-      where = { ...where, role: role.toUpperCase() }
+    if (plan) {
+      where = { ...where, plan: plan.toUpperCase() }
     }
 
     const count = await Model.count({ where })
@@ -78,20 +78,6 @@ const find = async ({ page, limit, keyword, gender, countryId, role }) => {
 const findById = async (id) => {
   try {
     const entry = await Model.findOne({ where: { id }, include })
-
-    if (!entry) {
-      throw new Error('Not found')
-    }
-
-    return entry.toJSON()
-  } catch (error) {
-    throw error
-  }
-}
-
-const findOne = async (where) => {
-  try {
-    const entry = await Model.findOne({ where, include })
 
     if (!entry) {
       throw new Error('Not found')
@@ -135,7 +121,6 @@ export default {
   count,
   find,
   findById,
-  findOne,
   create,
   update,
   delete: _delete,

@@ -31,21 +31,6 @@ export default {
     try {
       let data = { ...req.body }
 
-      // check entry exist
-      let entry = await Repository.findOne({ email: data.email })
-        .then((res) => res)
-        .catch((err) => {})
-
-      if (entry) {
-        // handle data
-
-        /**
-         * TEST
-         */
-        console.log('[TEST MODE] generate email for test')
-        data.email = data.email.replace('@', `-${Date.now()}@`)
-      }
-
       return await Repository.create(data)
     } catch (error) {
       throw error

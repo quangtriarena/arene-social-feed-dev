@@ -11,6 +11,10 @@ const Model = PostgresSequelize.define('customers', {
     autoIncrement: true,
     primaryKey: true,
   },
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
   firstName: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -20,15 +24,6 @@ const Model = PostgresSequelize.define('customers', {
     type: DataTypes.STRING,
     allowNull: false,
     schema: Joi.string().trim().required().min(1).max(30),
-  },
-  uuid: {
-    type: DataTypes.UUID,
-    defaultValue: DataTypes.UUIDV4,
-  },
-  username: {
-    type: DataTypes.STRING,
-    allowNull: false,
-    unique: true,
   },
   email: {
     type: DataTypes.STRING,
@@ -49,9 +44,9 @@ const Model = PostgresSequelize.define('customers', {
   birthday: {
     type: DataTypes.DATEONLY,
   },
-  role: {
-    type: DataTypes.ENUM(['GUEST', 'MEMBERSHIP', 'ADMIN']),
-    defaultValue: 'GUEST',
+  plan: {
+    type: DataTypes.ENUM(['BASIC', 'VIP']),
+    defaultValue: 'BASIC',
   },
   avatar: {
     type: DataTypes.STRING,
@@ -93,7 +88,7 @@ Model.prototype.toJSON = function () {
 
 Model.belongsTo(CountryModel)
 
-Model.sync()
-// Model.sync({ force: true })
+// Model.sync()
+Model.sync({ force: true })
 
 export default Model

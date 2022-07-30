@@ -1,22 +1,14 @@
 import ResponseHandler from '../helpers/responseHandler.js'
 import Joi from 'joi'
 
-const schema = {
-  name: Joi.string().min(1).max(50).required(),
-}
-
-let createSchema = {}
-Array.from(['name']).forEach((key) => (createSchema[key] = schema[key]))
-createSchema = Joi.object(createSchema)
-
-let updateSchema = {}
-Array.from(['name']).forEach((key) => (updateSchema[key] = schema[key]))
-updateSchema = Joi.object(updateSchema)
+const schema = Joi.object({
+  name: Joi.string().trim().required().min(1).max(50),
+})
 
 export default {
   create: async (req, res, next) => {
     try {
-      await createSchema.validateAsync(req.body)
+      await schema.validateAsync(req.body)
 
       next()
     } catch (error) {
@@ -26,7 +18,7 @@ export default {
 
   update: async (req, res, next) => {
     try {
-      await updateSchema.validateAsync(req.body)
+      await schema.validateAsync(req.body)
 
       next()
     } catch (error) {
