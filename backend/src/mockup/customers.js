@@ -809,6 +809,7 @@ data = data.map((item) => ({
     'https://picsum.photos/300/300',
     'https://picsum.photos/400/300',
   ],
+  role: Math.random() > 0.3 ? 'GUEST' : 'MEMBERSHIP',
 }))
 
 export default data

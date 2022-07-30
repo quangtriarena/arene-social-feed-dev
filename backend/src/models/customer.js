@@ -1,4 +1,5 @@
 import { DataTypes } from 'sequelize'
+import { Joi } from 'sequelize-joi'
 import PostgresSequelize from '../connector/postgres/index.js'
 
 import CountryModel from './country.js'
@@ -13,15 +14,30 @@ const Model = PostgresSequelize.define('customers', {
   firstName: {
     type: DataTypes.STRING,
     allowNull: false,
+    schema: Joi.string().trim().required().min(1).max(30),
   },
   lastName: {
     type: DataTypes.STRING,
     allowNull: false,
+    schema: Joi.string().trim().required().min(1).max(30),
+  },
+  uuid: {
+    type: DataTypes.UUID,
+    defaultValue: DataTypes.UUIDV4,
+  },
+  username: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
   },
   email: {
     type: DataTypes.STRING,
     allowNull: false,
     unique: true,
+    validate: {
+      isEmail: true,
+    },
+    schema: Joi.string().trim().required().email(),
   },
   phone: {
     type: DataTypes.STRING,
@@ -33,9 +49,13 @@ const Model = PostgresSequelize.define('customers', {
   birthday: {
     type: DataTypes.DATEONLY,
   },
+  role: {
+    type: DataTypes.ENUM(['GUEST', 'MEMBERSHIP', 'ADMIN']),
+    defaultValue: 'GUEST',
+  },
   avatar: {
     type: DataTypes.STRING,
-    defaultValue: '',
+    defaultValue: 'https://picsum.photos/300/300',
   },
   photos: {
     type: DataTypes.ARRAY(DataTypes.STRING),
@@ -74,5 +94,6 @@ Model.prototype.toJSON = function () {
 Model.belongsTo(CountryModel)
 
 Model.sync()
+// Model.sync({ force: true })
 
 export default Model

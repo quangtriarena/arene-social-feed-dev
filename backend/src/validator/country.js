@@ -2,7 +2,7 @@ import ResponseHandler from '../helpers/responseHandler.js'
 import Joi from 'joi'
 
 const schema = {
-  name: Joi.string().min(3).max(50).required(),
+  name: Joi.string().min(1).max(50).required(),
 }
 
 let createSchema = {}

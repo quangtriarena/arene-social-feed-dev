@@ -50,11 +50,12 @@ const find = async ({ page, limit, keyword }) => {
 const findById = async (id) => {
   try {
     const entry = await Model.findOne({ where: { id } })
+
     if (!entry) {
       throw new Error('Not found')
     }
 
-    return entry
+    return entry.toJSON()
   } catch (error) {
     throw error
   }
@@ -64,7 +65,7 @@ const create = async (data) => {
   try {
     const created = await Model.create(data)
 
-    return findById(created.id)
+    return created.toJSON()
   } catch (error) {
     throw error
   }
@@ -74,7 +75,7 @@ const update = async (id, data) => {
   try {
     const updated = await Model.update(data, { where: { id }, returning: true, plain: true })
 
-    return findById(updated[1].id)
+    return updated[1].toJSON()
   } catch (error) {
     throw error
   }

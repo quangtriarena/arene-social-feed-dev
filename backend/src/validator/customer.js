@@ -2,11 +2,9 @@ import ResponseHandler from '../helpers/responseHandler.js'
 import Joi from 'joi'
 
 const schema = {
-  firstName: Joi.string().min(3).max(30).required(),
-  lastName: Joi.string().min(3).max(30).required(),
-  email: Joi.string()
-    .email({ minDomainSegments: 2, tlds: { allow: ['com', 'net'] } })
-    .required(),
+  firstName: Joi.string().trim().required().min(1).max(30),
+  lastName: Joi.string().trim().required().min(1).max(30),
+  email: Joi.string().trim().required().email(),
   phone: Joi.any(),
   gender: Joi.any(),
   birthday: Joi.any(),
