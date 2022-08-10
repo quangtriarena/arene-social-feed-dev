@@ -81,7 +81,9 @@ const Model = PostgresSequelize.define('customers', {
 })
 
 Model.prototype.toJSON = function () {
-  var values = Object.assign({}, this.get())
+  let values = Object.assign({}, this.get())
+
+  values.country = values.country ? values.country.toJSON() : values.country
 
   return values
 }

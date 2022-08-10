@@ -76,9 +76,11 @@ const Model = PostgresSequelize.define('users', {
 })
 
 Model.prototype.toJSON = function () {
-  var values = Object.assign({}, this.get())
+  let values = Object.assign({}, this.get())
 
   delete values.password
+
+  values.country = values.country ? values.country.toJSON() : values.country
 
   return values
 }

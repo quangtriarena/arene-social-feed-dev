@@ -3,8 +3,13 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "build": "cd frontend/ && npm run build",
-    "serve": "cd backend/ && npm run serve"
+    "start:backend": "cd backend/ && yarn start",
+    "start:frontend": "cd frontend/ && yarn start",
+    "mockup": "cd backend/ && node src/mockup/index.js",
+    "build": "cd frontend/ && yarn build",
+    "serve": "cd backend/ && yarn serve",
+    "pm2:start": "yarn build && pm2 start ecosystem.config.js",
+    "pm2:reload": "yarn build && pm2 reload ecosystem.config.js"
   },
   "dependencies": {
     "dotenv": "^16.0.1"

@@ -18,7 +18,7 @@ const Model = PostgresSequelize.define('countries', {
 })
 
 Model.prototype.toJSON = function () {
-  var values = Object.assign({}, this.get())
+  let values = Object.assign({}, this.get())
 
   return values
 }
