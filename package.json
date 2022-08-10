@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
+    "inst": "yarn && cd backend/ && yarn && cd ../frontend/ && yarn && cd ../",
     "start:backend": "cd backend/ && yarn start",
     "start:frontend": "cd frontend/ && yarn start",
     "mockup": "cd backend/ && node src/mockup/index.js",
