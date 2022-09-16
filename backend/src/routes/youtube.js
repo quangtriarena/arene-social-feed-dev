@@ -14,7 +14,6 @@ router.get('/channels', async (req, res) => {
     const param = url.split('/')
 
     let data = null
-    let dataPlayList = null
     let fulldata = {}
     let params = {}
 
@@ -25,6 +24,26 @@ router.get('/channels', async (req, res) => {
     }
 
     data = await YoutubeApi.getChannel(params)
+
+    data = {
+      ...data,
+      channel: data.payload.items,
+    }
+
+    delete data.payload
+
+    if (data.success) {
+      let playlists = await YoutubeApi.getPlaylist(params)
+
+      data = {
+        ...data,
+        playlists: playlists.payload.items,
+      }
+    } else {
+      throw new Error('invalid channelId ')
+    }
+
+    delete data.success
 
     return ResponseHandler.success(res, data)
   } catch (error) {

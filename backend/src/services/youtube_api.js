@@ -119,8 +119,9 @@ const getChannel = async (params) => {
   }
 }
 
-const getPlaylist = async ({ part, channelId }) => {
+const getPlaylist = async (params) => {
   try {
+    const { part, channelId } = params
     const key = randomListKeyApi()
     const _part = part ? part : 'snippet,status,player,localizations,contentDetails'
 
