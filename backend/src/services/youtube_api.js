@@ -120,8 +120,48 @@ const getChannel = async ({ channelId, forUserName, user, field, part }) => {
 
 // const getPlaylist = async({})
 
+// key, ids, part, fields, maxResults, pageToken
+const getVideos = async ({ ids, part, maxResults, pageToken }) => {
+  try {
+    const key = randomListKeyApi()
+
+    // validate params
+    let paramsObj = { key, ids }
+    let paramsKeys = Object.keys(paramsObj)
+    for (let i = 0, leng = paramsKeys.length; i < leng; i++) {
+      if (!paramsObj[paramsKeys[i]]) {
+        throw { message: `Field ${paramsKeys[i]} is required` }
+      }
+    }
+
+    let _part = part ? part : 'snippet,contentDetails,statistics'
+    // let _maxResults = maxResults ? maxResults : '20'
+    // let _pageToken = pageToken ? pageToken : ''
+
+    const res = await apiCaller({
+      endpoint: '/videos',
+      params: `key=${key}&id=${ids}&part=${_part}`,
+    })
+
+    if (res.success) {
+      let videos = res.payload.items.map((item) => ({
+        id: item.id,
+        snippet: item.snippet,
+        contentDetails: item.contentDetails,
+        statistics: item.statistics,
+      }))
+      return (res.payload = videos)
+    }
+
+    return res
+  } catch (error) {
+    throw error
+  }
+}
+
 const YoutubeApi = {
   getChannel,
+  getVideos,
 }
 
 export default YoutubeApi

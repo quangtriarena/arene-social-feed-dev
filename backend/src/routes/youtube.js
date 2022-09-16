@@ -31,4 +31,18 @@ router.get('/channels', async (req, res) => {
   }
 })
 
+router.get('/videos', async (req, res) => {
+  try {
+    //3GGaIWjefcA,Z4WKFYFqFN8,0LHmevWVvpc,A9WuGqHP4bU
+    let ids = '3GGaIWjefcA'
+
+    const data = await YoutubeApi.getVideos({ ids })
+    console.log('data', data)
+
+    return ResponseHandler.success(res, data)
+  } catch (error) {
+    return ResponseHandler.error(res, error)
+  }
+})
+
 export default router
