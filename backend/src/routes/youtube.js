@@ -15,17 +15,15 @@ router.get('/channels', async (req, res) => {
 
     let data = null
 
-    if (param.includes('channel')) {
-      data = await YoutubeApi.getChannel({ id: param[param.length - 1] })
+    let params = {}
+
+    if (url.includes('/channel/')) {
+      params = { id: param[param.length - 1] }
+    } else if (url.includes('/user/')) {
+      params = { user: param[param.length - 1] }
     }
 
-    if (param.includes('user')) {
-      data = await YoutubeApi.getChannel({ user: param[param.length - 1] })
-    }
-
-    if (!param.includes('channel') && !param.includes('user')) {
-      data = await YoutubeApi.getChannel({ forUserName: param[param.length - 1] })
-    }
+    data = await YoutubeApi.getChannel(params)
 
     return ResponseHandler.success(res, data)
   } catch (error) {

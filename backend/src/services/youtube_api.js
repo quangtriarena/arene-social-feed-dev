@@ -94,21 +94,23 @@ const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null
   }
 }
 
-const getChannel = async ({ channelId, forUserName, user }) => {
+const getChannel = async ({ channelId, forUserName, user, field, part }) => {
   try {
     const key = randomListKeyApi()
+    const _part = part ? part : 'snippet,brandingSettings,statistics'
+    const _field = field ? field : '*'
 
     if (channelId) {
       return await apiCaller({
         endpoint: '/channels',
-        params: `key=${key}&id=${channelId}`,
+        params: `key=${key}&id=${channelId}&part=${_part}`,
       })
     }
 
     if (user) {
       return await apiCaller({
         endpoint: '/channels',
-        params: `key=${key}&forUsername=${user}`,
+        params: `key=${key}&forUsername=${user}&part=${_part}`,
       })
     }
   } catch (error) {
