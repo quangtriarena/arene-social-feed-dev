@@ -94,10 +94,11 @@ const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null
   }
 }
 
-const getChannel = async ({ channelId, forUserName, user, field, part }) => {
+const getChannel = async (params) => {
   try {
+    const { channelId, forUserName, user, field, part } = params
     const key = randomListKeyApi()
-    const _part = part ? part : 'snippet,brandingSettings,statistics'
+    const _part = part ? part : 'id,snippet,brandingSettings,statistics'
     const _field = field ? field : '*'
 
     if (channelId) {
@@ -118,10 +119,23 @@ const getChannel = async ({ channelId, forUserName, user, field, part }) => {
   }
 }
 
-// const getPlaylist = async({})
+const getPlaylist = async ({ part, channelId }) => {
+  try {
+    const key = randomListKeyApi()
+    const _part = part ? part : 'snippet,status,player,localizations,contentDetails'
+
+    return await apiCaller({
+      endpoint: '/playlists',
+      params: `key=${key}&channelId=${channelId}&part=${_part}`,
+    })
+  } catch (error) {
+    throw new Error('Invalid youtube playlist url')
+  }
+}
 
 const YoutubeApi = {
   getChannel,
+  getPlaylist,
 }
 
 export default YoutubeApi
