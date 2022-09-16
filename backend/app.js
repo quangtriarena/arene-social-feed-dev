@@ -8,7 +8,7 @@ import cookieParser from 'cookie-parser'
 import logger from 'morgan'
 import cors from 'cors'
 import bodyParser from 'body-parser'
-
+import youtubeRoute from './src/routes/youtube.js'
 // import indexRouter from './src/routes/index.js'
 // import userRouter from './src/routes/user.js'
 // import countryRouter from './src/routes/country.js'
@@ -51,6 +51,7 @@ app.use(
 // app.use('/api/countries', countryRouter)
 // app.use('/api/customers', customerRouter)
 // app.use('/api/upload', uploadRouter)
+app.use('/api', youtubeRoute)
 
 app.get('/*', function (req, res) {
   NODE_ENV === 'development'
