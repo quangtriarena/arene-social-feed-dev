@@ -9,11 +9,11 @@ import logger from 'morgan'
 import cors from 'cors'
 import bodyParser from 'body-parser'
 
-import indexRouter from './src/routes/index.js'
-import userRouter from './src/routes/user.js'
-import countryRouter from './src/routes/country.js'
-import customerRouter from './src/routes/customer.js'
-import uploadRouter from './src/routes/upload.js'
+// import indexRouter from './src/routes/index.js'
+// import userRouter from './src/routes/user.js'
+// import countryRouter from './src/routes/country.js'
+// import customerRouter from './src/routes/customer.js'
+// import uploadRouter from './src/routes/upload.js'
 
 const __filename = fileURLToPath(import.meta.url)
 const __dirname = path.dirname(__filename)
@@ -47,10 +47,10 @@ app.use(
 )
 
 // app.use('/', indexRouter)
-app.use('/api/users', userRouter)
-app.use('/api/countries', countryRouter)
-app.use('/api/customers', customerRouter)
-app.use('/api/upload', uploadRouter)
+// app.use('/api/users', userRouter)
+// app.use('/api/countries', countryRouter)
+// app.use('/api/customers', customerRouter)
+// app.use('/api/upload', uploadRouter)
 
 app.get('/*', function (req, res) {
   NODE_ENV === 'development'
@@ -76,6 +76,7 @@ app.use(function (err, req, res, next) {
 
 app.listen(PORT, () => {
   console.log(`🚀 App listening on port ${PORT}`)
+  console.log(`http://localhost:5000/`)
 })
 
 export default app
