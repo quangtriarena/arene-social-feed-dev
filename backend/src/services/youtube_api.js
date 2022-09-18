@@ -57,6 +57,25 @@ const randomListKeyApi = () => {
   return LIST_KEY[index]
 }
 
+/**
+ *
+ * @param {Object} data
+ */
+const validateParams = (data) => {
+  console.log('🚀 ~ file: youtube_api.js ~ line 65 ~ validateParams ~ data', data)
+  try {
+    let keys = Object.keys(data)
+    console.log('keys', keys)
+    for (let i = 0, leng = keys.length; i < leng; i++) {
+      if (!data[keys[i]]) {
+        throw { message: `Bad request. Field ${keys[i]} is required`, field: keys[i] }
+      }
+    }
+  } catch (error) {
+    throw error
+  }
+}
+
 const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null, params }) => {
   try {
     let axiosConfig = {
@@ -94,10 +113,11 @@ const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null
   }
 }
 
-const getChannel = async ({ channelId, forUserName, user, field, part }) => {
+const getChannel = async (params) => {
   try {
+    const { channelId, forUserName, user, field, part } = params
     const key = randomListKeyApi()
-    const _part = part ? part : 'snippet,brandingSettings,statistics'
+    const _part = part ? part : 'id,snippet,brandingSettings,statistics'
     const _field = field ? field : '*'
 
     if (channelId) {
@@ -118,29 +138,63 @@ const getChannel = async ({ channelId, forUserName, user, field, part }) => {
   }
 }
 
-// const getPlaylist = async({})
+const getPlaylist = async (params) => {
+  try {
+    const { part, channelId } = params
+    const key = randomListKeyApi()
+    const _part = part ? part : 'snippet,status,player,localizations,contentDetails'
 
-// key, ids, part, fields, maxResults, pageToken
+    return await apiCaller({
+      endpoint: '/playlists',
+      params: `key=${key}&channelId=${channelId}&part=${_part}`,
+    })
+  } catch (error) {
+    throw new Error('Invalid youtube playlist url')
+  }
+}
+
+const getVideosOfPlayList = async ({ playlistId, part, maxResults, pageToken }) => {
+  try {
+    const key = randomListKeyApi()
+
+    validateParams({ key, playlistId })
+
+    let _part = part ? part : 'snippet,contentDetails'
+    let _maxResults = maxResults ? maxResults : '20'
+    let _pageToken = pageToken ? `&pageToken=${pageToken}` : ''
+
+    const res = await apiCaller({
+      endpoint: '/playlistItems',
+      params: `key=${key}&playlistId=${playlistId}&part=${_part}&maxResults=${_maxResults}${_pageToken}`,
+    })
+
+    if (res.success) {
+      let ids = res.payload.items
+        .filter((item) => item.snippet.resourceId && item.snippet.resourceId.videoId)
+        .map((item) => item.snippet.resourceId.videoId)
+
+      res.payload = ids
+    }
+
+    return res
+  } catch (error) {
+    throw new Error('Invalid youtube getVideosOfPlaylist url')
+  }
+}
+
 const getVideos = async ({ ids, part, maxResults, pageToken }) => {
   try {
     const key = randomListKeyApi()
 
-    // validate params
-    let paramsObj = { key, ids }
-    let paramsKeys = Object.keys(paramsObj)
-    for (let i = 0, leng = paramsKeys.length; i < leng; i++) {
-      if (!paramsObj[paramsKeys[i]]) {
-        throw { message: `Field ${paramsKeys[i]} is required` }
-      }
-    }
+    validateParams({ key, ids })
 
     let _part = part ? part : 'snippet,contentDetails,statistics'
-    // let _maxResults = maxResults ? maxResults : '20'
-    // let _pageToken = pageToken ? pageToken : ''
+    let _maxResults = maxResults ? maxResults : '20'
+    let _pageToken = pageToken ? `&pageToken=${pageToken}` : ''
 
     const res = await apiCaller({
       endpoint: '/videos',
-      params: `key=${key}&id=${ids}&part=${_part}`,
+      params: `key=${key}&id=${ids}&part=${_part}&maxResults=${_maxResults}${_pageToken}`,
     })
 
     if (res.success) {
@@ -155,13 +209,80 @@ const getVideos = async ({ ids, part, maxResults, pageToken }) => {
 
     return res
   } catch (error) {
-    throw error
+    throw new Error('Invalid youtube getVideos url')
+  }
+}
+
+const getComments = async ({ videoId, part, maxResults, pageToken, textFormat }) => {
+  try {
+    let key = randomListKeyApi()
+
+    validateParams({ key, videoId })
+
+    let _part = part ? part : 'snippet,replies'
+    let _maxResults = maxResults ? maxResults : '20'
+    let _pageToken = pageToken ? `&pageToken=${pageToken}` : ''
+    let _textFormat = textFormat ? textFormat : 'html'
+
+    const res = await apiCaller({
+      endpoint: '/commentThreads',
+      params: `key=${key}&videoId=${videoId}&part=${_part}&maxResults=${_maxResults}${_pageToken}&textFormat=${_textFormat}`,
+    })
+
+    if (res.success) {
+      let comments = res.payload.items.map((item) => ({
+        id: item.id,
+        snippet: item.snippet,
+      }))
+      return (res.payload = comments)
+    }
+
+    return res
+  } catch (error) {
+    throw new Error('Invalid youtube getComments url')
+  }
+}
+
+const getLastestVideos = async ({ channelId, part, maxResults, pageToken }) => {
+  try {
+    let key = randomListKeyApi()
+
+    validateParams({ key, channelId })
+
+    let _part = part ? part : 'snippet'
+    let _maxResults = maxResults ? maxResults : '20'
+    let _pageToken = pageToken ? `&pageToken=${pageToken}` : ''
+
+    let res = await apiCaller({
+      endpoint: '/search',
+      params: `key=${key}&channelId=${channelId}&part=${_part}&maxResults=${_maxResults}&order=date&type=video${_pageToken}`,
+    })
+
+    if (res.success) {
+      let videos = res.payload.items.map((item) => ({
+        id: item.id.videoId,
+        snippet: item.snippet,
+        nextPageToken: res.payload.nextPageToken,
+        regionCode: res.payload.regionCode,
+        pageInfo: res.payload.pageInfo,
+      }))
+
+      return (res.payload = videos)
+    }
+
+    return res
+  } catch (error) {
+    throw new Error('Invalid youtube getLastestVideos url')
   }
 }
 
 const YoutubeApi = {
   getChannel,
+  getPlaylist,
+  getLastestVideos,
+  getVideosOfPlayList,
   getVideos,
+  getComments,
 }
 
 export default YoutubeApi
