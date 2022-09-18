@@ -39,6 +39,12 @@ router.get('/channels', async (req, res) => {
         ...data,
         playlists: playlists.payload.items,
       }
+
+      if (data.playlists.length) {
+        // an lam
+      } else {
+        throw new Error('invalid playlist ')
+      }
     } else {
       throw new Error('invalid channelId ')
     }

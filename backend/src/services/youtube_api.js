@@ -66,8 +66,6 @@ const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null
       headers: headers || null,
     }
 
-    console.log('axiosConfig', axiosConfig)
-
     const res = await axios(axiosConfig)
 
     return {
@@ -77,19 +75,13 @@ const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null
   } catch (error) {
     let message = error.message
 
-    if (
-      error.response &&
-      error.response.data &&
-      error.response.data.error &&
-      error.response.data.error.message
-    ) {
-      message = error.response.data.error.message
+    if (error.response?.data?.message) {
+      message = error.response.data.message
     }
 
-    console.log(`YoutubeApi.apiCaller error`, message)
     return {
       success: false,
-      error: { message },
+      message,
     }
   }
 }
@@ -131,6 +123,13 @@ const getPlaylist = async (params) => {
     })
   } catch (error) {
     throw new Error('Invalid youtube playlist url')
+  }
+}
+
+const getVideoPlayList = async (params) => {
+  try {
+  } catch (error) {
+    throw new Error('invalid playlistID')
   }
 }
 
