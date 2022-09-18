@@ -47,7 +47,6 @@ const LIST_KEY = [
  * @param {String} endpoint
  * @param {String} method
  * @param {Object} data
- * @param {Object} extraHeaders
  * @returns Object
  */
 
@@ -88,24 +87,35 @@ const apiCaller = async ({ endpoint, method = 'GET', data = null, headers = null
 
 const getChannel = async (params) => {
   try {
-    const { channelId, forUserName, user, field, part } = params
+    const { channelId, customUsername, user, field, part } = params
     const key = randomListKeyApi()
     const _part = part ? part : 'id,snippet,brandingSettings,statistics'
     const _field = field ? field : '*'
 
+    let res = null
+
     if (channelId) {
-      return await apiCaller({
+      res = await apiCaller({
         endpoint: '/channels',
         params: `key=${key}&id=${channelId}&part=${_part}`,
       })
     }
 
     if (user) {
-      return await apiCaller({
+      res = await apiCaller({
         endpoint: '/channels',
         params: `key=${key}&forUsername=${user}&part=${_part}`,
       })
     }
+
+    // if (customUsername) {
+    //   return await apiCaller({
+    //     endpoint: `/c`,
+    //     params: `key=${key}&forUsername=${customUsername}&part=${_part}`,
+    //   })
+    // }
+
+    return res
   } catch (error) {
     throw new Error('Invalid youtube channel url')
   }
@@ -126,7 +136,7 @@ const getPlaylist = async (params) => {
   }
 }
 
-const getVideoPlayList = async (params) => {
+const getPlaylistItems = async (params) => {
   try {
   } catch (error) {
     throw new Error('invalid playlistID')

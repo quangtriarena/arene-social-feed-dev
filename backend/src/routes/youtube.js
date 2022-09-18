@@ -10,17 +10,20 @@ const router = express.Router()
 
 router.get('/channels', async (req, res) => {
   try {
-    const url = 'https://www.youtube.com/channel/UCl6HKsYfp0EXWZZrKTKBZwA'
+    const url = 'https://www.youtube.com/channel/UCq3s8x6TAWfeBC5q_zaGMYw'
     const param = url.split('/')
 
     let data = null
-    let fulldata = {}
     let params = {}
 
     if (url.includes('/channel/')) {
       params = { channelId: param[param.length - 1] }
     } else if (url.includes('/user/')) {
       params = { user: param[param.length - 1] }
+    } else if (url.includes('/c/')) {
+      params = { customUsername: param[param.length - 1] }
+    } else {
+      throw new Error('invalid url')
     }
 
     data = await YoutubeApi.getChannel(params)
