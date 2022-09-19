@@ -50,58 +50,59 @@ router.get('/channels', async (req, res) => {
   }
 })
 
-// router.get('/videos', async (req, res) => {
-//   try {
-//     //3GGaIWjefcA,Z4WKFYFqFN8,0LHmevWVvpc,A9WuGqHP4bU
-//     let ids = '3GGaIWjefcA'
-//     // let ids = ''
+router.get('/videos', async (req, res) => {
+  try {
+    //3GGaIWjefcA,Z4WKFYFqFN8,0LHmevWVvpc,A9WuGqHP4bU
+    let ids = '3GGaIWjefcA'
+    // let ids = ''
 
-//     const data = await YoutubeApi.getVideos({ ids })
+    const data = await YoutubeApi.getVideos({ ids })
 
-//     return ResponseHandler.success(res, data)
-//   } catch (error) {
-//     return ResponseHandler.error(res, error)
-//   }
-// })
+    return ResponseHandler.success(res, data)
+  } catch (error) {
+    return ResponseHandler.error(res, error)
+  }
+})
 
-// router.get('/videosOfPlayList', async (req, res) => {
-//   try {
-//     let playlistId = 'PL-ERGT8JXJe-Jr_V6L_GlIfRss7HrT7Er'
+router.get('/videosOfPlayList', async (req, res) => {
+  try {
+    console.log('aa')
+    let playlistId = 'PL-ERGT8JXJe-Jr_V6L_GlIfRss7HrT7Er'
 
-//     const data = await YoutubeApi.getVideosOfPlayList({ playlistId })
-//     console.log('🚀 ~ file: youtube.js ~ line 72 ~ router.get ~ data', data)
+    const data = await YoutubeApi.getVideosOfPlayList({ playlistId })
+    console.log('🚀 ~ file: youtube.js ~ line 72 ~ router.get ~ data', data)
 
-//     return ResponseHandler.success(res, data)
-//   } catch (error) {
-//     return ResponseHandler.error(res, error)
-//   }
-// })
+    return ResponseHandler.success(res, data)
+  } catch (error) {
+    return ResponseHandler.error(res, error)
+  }
+})
 
-// router.get('/comments', async (req, res) => {
-//   try {
-//     let videoId = '3zyoPRYf4i0'
-//     let maxResults = 5
+router.get('/comments', async (req, res) => {
+  try {
+    let videoId = '3zyoPRYf4i0'
+    let maxResults = 5
 
-//     const data = await YoutubeApi.getComments({ videoId, maxResults })
+    const data = await YoutubeApi.getComments({ videoId, maxResults })
 
-//     return ResponseHandler.success(res, data)
-//   } catch (error) {
-//     return ResponseHandler.error(res, data)
-//   }
-// })
+    return ResponseHandler.success(res, data)
+  } catch (error) {
+    return ResponseHandler.error(res, data)
+  }
+})
 
-// router.get('/getVideosOfPlayList', async (req, res) => {
-//   try {
-//     let channelId = 'UCl6HKsYfp0EXWZZrKTKBZwA'
-//     let maxResults = '2'
+router.get('/getVideosOfPlayList', async (req, res) => {
+  try {
+    let channelId = 'UCl6HKsYfp0EXWZZrKTKBZwA'
+    let maxResults = '2'
 
-//     const data = await YoutubeApi.getLastestVideos({ channelId, maxResults })
-//     console.log('🚀 ~ file: youtube.js ~ line 99 ~ router.get ~ data', data)
+    const data = await YoutubeApi.getLastestVideos({ channelId, maxResults })
+    console.log('🚀 ~ file: youtube.js ~ line 99 ~ router.get ~ data', data)
 
-//     return ResponseHandler.success(res, data)
-//   } catch (error) {
-//     return ResponseHandler.error(res, error)
-//   }
-// })
+    return ResponseHandler.success(res, data)
+  } catch (error) {
+    return ResponseHandler.error(res, error)
+  }
+})
 
 export default router

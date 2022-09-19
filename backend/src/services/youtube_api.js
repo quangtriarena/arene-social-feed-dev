@@ -153,6 +153,9 @@ const getPlaylist = async (params) => {
   }
 }
 
+/**
+ * get list videos of playList
+ */
 const getVideosOfPlayList = async ({ playlistId, part, maxResults, pageToken }) => {
   try {
     const key = randomListKeyApi()
